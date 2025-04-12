@@ -6,3 +6,12 @@ create table produtos(
     id int primary key auto_increment,
     nome varchar(50)
 );
+
+
+create table clientes(
+    id int primary key auto_increment,
+    nome varchar(50)
+);
+
+
+alter table produtos add column quantidade int;

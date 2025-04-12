@@ -1,0 +1,26 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Run Shell Script",
+        "type": "shell",
+        "command": "${workspaceFolder}\\script.bat",
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Create database",
+        "type": "shell",
+        "command": "${workspaceFolder}\\my_sql.bat",
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "problemMatcher": []
+      }
+    ]
+  }
+  
