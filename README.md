@@ -14,3 +14,16 @@ Pasta que contém os arquivos responsáveis por executar os comandos no banco de
 
 ## src/telas
 Pasta que contém os arquivos responsáveis por interagir com o usuário e chamar a camada de `repositorios` para interagir com o banco de dados.
+
+
+
+## Fazer exercício da aula passada (enviado no whatsapp pdf)
+
+##  Quem já fez o exercício pode fazer o exercício abaixo:
+criar uma tabela fornecedores:
+- id
+- razao social
+- cnpj
+- nome fantasia
+- valor faturamento
+- quantidade de colaboradores
