@@ -2,9 +2,9 @@
     "version": "2.0.0",
     "tasks": [
       {
-        "label": "Run Shell Script",
+        "label": "Create env",
         "type": "shell",
-        "command": "${workspaceFolder}\\script.bat",
+        "command": "${workspaceFolder}\\.scripts\\script.bat",
         "group": {
           "kind": "build",
           "isDefault": true

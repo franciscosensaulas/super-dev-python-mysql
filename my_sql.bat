@@ -12,7 +12,7 @@ set DB_HOST=localhost
 set SQL_FILE=.\src\database\estrutura.sql
 
 :: Check if SQL file exists
-if not exist %SQL_FILE% (
+if not exist %SQL_FILE%w (
     echo [ERROR] SQL file "%SQL_FILE%" not found.
     pause
     exit /b
