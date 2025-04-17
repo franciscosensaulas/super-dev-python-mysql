@@ -43,6 +43,10 @@ def __apagar():
 
     id_para_apagar = int(questionary.select("Escolha o produto para apagar", choices=opcoes_produtos).ask())
 
+    confirmacao = questionary.confirm("Deseja realmente apagar o produto?").ask()
+    if confirmacao == False:
+        return
+
     produto_repositorio.apagar(id_para_apagar)
     print("Produto apagado com sucesso")
 
