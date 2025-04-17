@@ -1,6 +1,10 @@
 import questionary
+from rich.console import Console
+from rich.table import Table
 from src.repositorios import produto_repositorio
 
+
+global produtos
 
 def executar_produto():
     opcoes = ["Listar todos", "Cadastrar", "Editar", "Apagar", "Voltar"]
@@ -20,7 +24,13 @@ def executar_produto():
 
 
 def __editar():
-    id_para_editar = int(questionary.text("Digite o id do produto para editar: ").ask())
+    produtos = produto_repositorio.listar_todos()
+    opcoes_produtos = []
+    for produto in produtos:
+        opcao = questionary.Choice(title=produto["nome"], value=produto["id"])
+        opcoes_produtos.append(opcao)
+    id_para_editar = int(questionary.select("Escolha o produto para editar:", choices=opcoes_produtos).ask())
+
     novo_nome_produto = questionary.text("Digite o nome do produto: ", validate=__validar_nome).ask().strip()
     produto_repositorio.editar(id_para_editar, novo_nome_produto)
     print("Produto alterado com sucesso")
@@ -35,6 +45,10 @@ def __apagar():
 
     id_para_apagar = int(questionary.select("Escolha o produto para apagar", choices=opcoes_produtos).ask())
 
+    confirmacao = questionary.confirm("Deseja realmente apagar o produto?").ask()
+    if confirmacao == False:
+        return
+
     produto_repositorio.apagar(id_para_apagar)
     print("Produto apagado com sucesso")
 
@@ -45,15 +59,26 @@ def __listar_todos():
         print("Nenhum produto cadastrado!")
         return
 
+    console = Console()
+    tabela = Table()
+    tabela.add_column("Código", style="blue")
+    tabela.add_column("Nome", style="red")
+
     print("Lista de produtos:")
     for produto in produtos:
-        print("Id:", produto["id"], "Nome:", produto["nome"])
 
+        tabela.add_row(
+            str(produto["id"]),
+            produto["nome"]
+        )
+    console.print(tabela)
 
 # Funções com um/dois underline(s) antes do nome são consideradas 
 # funções privadas, ou seja, n devem/podem ser utilizadas em outros
 # arquivos 
 def __cadastrar():
+    global produtos
+    produtos = produto_repositorio.listar_todos()
     # Função responsável por cadastrar um produto, solicitando os dados 
     # necessários para o cadastro
     nome_produto = questionary.text("Digite o nome do produto: ", validate=__validar_nome).ask().strip()
@@ -66,6 +91,11 @@ def __cadastrar():
 
 
 def __validar_nome(nome: str):
+    global produtos
+    for produto in produtos:
+        if nome.strip() == produto["nome"]:
+            return "Já existe produto cadastrado com este nome"
+
     if len(nome.strip()) < 3:
         return "Nome do produto deve conter no mínimo 3 caracteres"
     if len(nome.strip()) > 50:
