@@ -33,7 +33,7 @@ def listar_todos():
         cursor = conexao.cursor()
         
         # Executar a consulta SQL para buscar todos os produtos (id e nome) da tabela 'produtos'
-        cursor.execute("select id, nome from produtos")
+        cursor.execute("select id, nome from produtos ORDER BY nome")
         # O método fetchall() recupera todos os registros retornados pela consulta SQL executada 
         # e os armazena em uma lista de tuplas, onde cada tupla representa uma linha de dados.
         # Neste caso, 'registros' irá conter todas as linhas da tabela 'produtos' (id e nome).
