@@ -1,6 +1,7 @@
 import questionary
 from rich.console import Console
 from rich.table import Table
+from src.models.produto import Produto
 from src.repositorios import produto_repositorio
 
 
@@ -24,15 +25,18 @@ def executar_produto():
 
 
 def __editar():
+    global produtos
     produtos = produto_repositorio.listar_todos()
     opcoes_produtos = []
     for produto in produtos:
-        opcao = questionary.Choice(title=produto["nome"], value=produto["id"])
+        opcao = questionary.Choice(title=produto.nome, value=produto.id)
         opcoes_produtos.append(opcao)
     id_para_editar = int(questionary.select("Escolha o produto para editar:", choices=opcoes_produtos).ask())
 
     novo_nome_produto = questionary.text("Digite o nome do produto: ", validate=__validar_nome).ask().strip()
-    produto_repositorio.editar(id_para_editar, novo_nome_produto)
+
+    produto = Produto(id=id_para_editar, nome=novo_nome_produto)
+    produto_repositorio.editar(produto)
     print("Produto alterado com sucesso")
 
 def __apagar():
@@ -40,7 +44,8 @@ def __apagar():
 
     opcoes_produtos = []
     for produto in produtos:
-        opcao = questionary.Choice(title=produto["nome"], value=produto["id"])
+        # opcao = questionary.Choice(title=produto["nome"], value=produto["id"])
+        opcao = questionary.Choice(title=produto.nome, value=produto.id)
         opcoes_produtos.append(opcao)
 
     id_para_apagar = int(questionary.select("Escolha o produto para apagar", choices=opcoes_produtos).ask())
@@ -68,8 +73,8 @@ def __listar_todos():
     for produto in produtos:
 
         tabela.add_row(
-            str(produto["id"]),
-            produto["nome"]
+            str(produto.id),
+            produto.nome
         )
     console.print(tabela)
 
@@ -84,8 +89,9 @@ def __cadastrar():
     nome_produto = questionary.text("Digite o nome do produto: ", validate=__validar_nome).ask().strip()
     
     # Chamar a função de cadastrar(insert) o produto no bd
-    # passando como parâmetro o nome do produto
-    produto_repositorio.cadastrar(nome_produto)
+    # passando como parâmetro o objeto do produto
+    produto = Produto(nome=nome_produto)
+    produto_repositorio.cadastrar(produto)
     
     print("Produto cadastrado com sucesso")
 
@@ -93,7 +99,7 @@ def __cadastrar():
 def __validar_nome(nome: str):
     global produtos
     for produto in produtos:
-        if nome.strip() == produto["nome"]:
+        if nome.strip() == produto.nome:
             return "Já existe produto cadastrado com este nome"
 
     if len(nome.strip()) < 3:
